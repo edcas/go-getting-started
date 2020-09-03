@@ -1,6 +1,8 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+)
 
 type Server struct {
 	port string
@@ -14,9 +16,12 @@ func NewServer(port string) *Server {
 	}
 }
 
+func (server *Server) Handle(path string, handler http.HandlerFunc)  {
+	server.router.rules[path] = handler
+}
+
 func (server *Server) Listen() error  {
 	http.Handle("/", server.router)
-
 	err := http.ListenAndServe(server.port, nil)
 
 	if err != nil {
